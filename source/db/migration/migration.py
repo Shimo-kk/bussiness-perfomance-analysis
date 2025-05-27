@@ -12,7 +12,79 @@ def migrate():
 
     cur.execute(
         """
-        CREATE TABLE pl_data (
+        CREATE TABLE IF NOT EXISTS major (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS product_category (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS product (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS item (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS devision (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS channel (
+            "name" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS level (
+            "level7" TEXT,
+            "level6" TEXT,
+            "level5" TEXT,
+            "level4" TEXT,
+            "level3" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS variance_factor (
+            "level7" TEXT,
+            "level6" TEXT,
+            "level5" TEXT,
+            "level4" TEXT,
+            "level3" TEXT
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS pl_data (
             "Year" TEXT,
             "Quarter" TEXT,
             "Period" TEXT,

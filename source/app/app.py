@@ -2,21 +2,23 @@ import os
 from dotenv import load_dotenv
 import streamlit as st
 import sqlite3
-from analyzer import VarianceFactorAnalysisOptions
+from analyzer import VarianceFactorAnalysisOptions, TrendAnalysisOptions, ItemOptions
 
 # .envファイルの読み込み
 load_dotenv()
 
-DB_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), "db", "bussiness_perfomance_analysis.db"
-)
-
-conn = sqlite3.connect(DB_PATH)
+conn = sqlite3.connect(os.getenv("DATABASE_URL"))
 
 
 def main():
-
     varianceFactorAnalysisOptions = VarianceFactorAnalysisOptions(
+        target_year="",
+        target_period="",
+        source_year="",
+        source_period="",
+    )
+
+    itemOptions = ItemOptions(
         mejor_name="",
         product_category="",
         product_name="",
@@ -37,53 +39,53 @@ def main():
         # 分析タイプの選択
         analysis_type = st.radio("", ["差異要因分析", "トレンド分析"])
 
+        # 区切り線を追加
+        st.divider()
+
         if analysis_type == "差異要因分析":
+            varianceFactorAnalysisOptions.target_year = st.selectbox(
+                "分析対象", ["2024", "2023"]
+            )
+
+        else:
             # Mejor and Name
             varianceFactorAnalysisOptions.mejor_name = st.selectbox(
                 "Mejor and Name", ["AZ - Asian"]
             )
 
-            # Minor Sub Product Category and Desc
-            varianceFactorAnalysisOptions.product_category = st.selectbox(
-                "Minor Sub Product Category and Desc", ["001 - Dumpling"]
-            )
+        # 区切り線を追加
+        st.divider()
 
-            # Product 2 and Name
-            varianceFactorAnalysisOptions.product_name = st.selectbox(
-                "Product 2 and Name", ["AZ01 - Gyoza", "AZ02 - Potstickers"]
-            )
+        # Mejor and Name
+        itemOptions.mejor_name = st.selectbox("Mejor and Name", ["AZ - Asian"])
 
-            # Item Desc
-            varianceFactorAnalysisOptions.item = st.selectbox(
-                "Item Desc",
-                ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
-            )
+        # Minor Sub Product Category and Desc
+        itemOptions.product_category = st.selectbox(
+            "Minor Sub Product Category and Desc", ["001 - Dumpling"]
+        )
 
-            # Devision Name
-            varianceFactorAnalysisOptions.devision_name = st.selectbox(
-                "Devision Name",
-                ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
-            )
+        # Product 2 and Name
+        itemOptions.product_name = st.selectbox(
+            "Product 2 and Name", ["AZ01 - Gyoza", "AZ02 - Potstickers"]
+        )
 
-            # Channel Name
-            varianceFactorAnalysisOptions.channel_name = st.selectbox(
-                "Channel Name",
-                ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
-            )
+        # Item Desc
+        itemOptions.item = st.selectbox(
+            "Item Desc",
+            ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
+        )
 
-        else:
-            #
-            department = st.selectbox(
-                "部門", ["営業部", "マーケティング部", "開発部", "管理部"]
-            )
+        # Devision Name
+        itemOptions.devision_name = st.selectbox(
+            "Devision Name",
+            ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
+        )
 
-            # 指標選択
-            metric = st.selectbox(
-                "分析指標", ["売上", "利益", "顧客数", "注文数", "平均注文単価"]
-            )
-
-            # 期間選択（部門別分析の場合は全期間固定）
-            period = "全期間"
+        # Channel Name
+        itemOptions.channel_name = st.selectbox(
+            "Channel Name",
+            ["AJI-CHKN PS .7oz 10/12ct", "AJI-GYO JPN STY PK CK 8/3.18 LB"],
+        )
 
         # 区切り線を追加
         st.divider()
